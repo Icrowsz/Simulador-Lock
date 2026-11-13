@@ -3,6 +3,7 @@ from jogador import Jogador, POSICOES
 from treinador import Treinador
 from equipe import Equipe
 from partida import Partida
+import visual
 
 jogadores = []
 treinadores = []
@@ -153,17 +154,26 @@ def adicionar_jogador_equipe():
             print(erro)
 
 
+def _linha_jogador(j):
+    return [j.nome, j.posicao, j.chute, j.passe, j.velocidade, j.defesa]
+
+
+CABECALHO_JOGADOR = ["Jogador", "Posição", "Chute", "Passe", "Veloc.", "Defesa"]
+
+
 def listar_equipes():
+    if not equipes and not jogadores:
+        print("Nada cadastrado ainda.")
+        return
     for equipe in equipes:
-        print(f"\n{equipe}")
-        print("  " + equipe.treinador.apresentar())
-        for j in equipe.jogadores:
-            print("  " + j.apresentar())
+        print(f"\n{visual.amarelo(equipe.nome)}  |  Técnico: {equipe.treinador.nome}"
+              f"  |  {len(equipe.jogadores)}/{equipe.TAMANHO} jogadores")
+        print(f"Filosofia: {equipe.treinador.filosofia}")
+        visual.tabela([_linha_jogador(j) for j in equipe.jogadores], CABECALHO_JOGADOR)
     jogadores_livres = [j for j in jogadores if not any(j in e.jogadores for e in equipes)]
     if jogadores_livres:
-        print("\nSem equipe:")
-        for pessoa in jogadores_livres:
-            print("  " + pessoa.apresentar())
+        print(f"\n{visual.amarelo('Sem equipe')}")
+        visual.tabela([_linha_jogador(j) for j in jogadores_livres], CABECALHO_JOGADOR)
 
 
 def simular_partida():
@@ -182,7 +192,7 @@ def simular_partida():
         print(erro)
         return
     partida.simular()
-    print(partida.relatorio())
+    visual.mostrar_partida(partida)
     partida_id = banco.salvar_partida(partida)
     print(f"\nPartida #{partida_id} salva no banco.")
 
@@ -192,14 +202,17 @@ def ver_historico():
     if not partidas:
         print("Nenhuma partida salva ainda.")
         return
-    for id_, data, casa, g1, g2, visitante in partidas:
-        print(f"#{id_} [{data}] {casa} {g1} x {g2} {visitante}")
+    linhas = [[id_, data, visual.vermelho(casa), f"{g1} x {g2}", visual.azul(visitante)]
+              for id_, data, casa, g1, g2, visitante in partidas]
+    visual.tabela(linhas, ["#", "Data", "Casa", "Placar", "Visitante"])
     escolha = input("Número da partida para ver estatísticas (Enter para voltar): ")
     if escolha.isdigit():
-        linhas = banco.estatisticas_da_partida(int(escolha))
-        print(f"\n{'Jogador':<22}{'Equipe':<10}{'Gols':>5}{'Assist':>8}{'Defesas':>9}")
-        for nome, equipe, gols, assist, defesas in linhas:
-            print(f"{nome:<22}{equipe:<10}{gols:>5}{assist:>8}{defesas:>9}")
+        estatisticas = banco.estatisticas_da_partida(int(escolha))
+        if not estatisticas:
+            print("Partida não encontrada.")
+            return
+        visual.tabela([list(linha) for linha in estatisticas],
+                      ["Jogador", "Equipe", "Gols", "Assist.", "Defesas"])
 
 
 def ver_ranking():
@@ -207,9 +220,8 @@ def ver_ranking():
     if not linhas:
         print("Nenhuma partida salva ainda.")
         return
-    print(f"{'Jogador':<22}{'Posição':<15}{'Jogos':>6}{'Gols':>6}{'Assist':>8}{'Defesas':>9}")
-    for nome, posicao, jogos, gols, assist, defesas in linhas:
-        print(f"{nome:<22}{posicao:<15}{jogos:>6}{gols:>6}{assist:>8}{defesas:>9}")
+    visual.tabela([[pos, *linha] for pos, linha in enumerate(linhas, 1)],
+                  ["Pos.", "Jogador", "Posição", "Jogos", "Gols", "Assist.", "Defesas"])
 
 
 MENU = """
@@ -232,7 +244,7 @@ ACOES = {"1": carregar_exemplo, "2": cadastrar_jogador, "3": cadastrar_treinador
 if __name__ == "__main__":
     banco.criar_tabelas()
     while True:
-        print(MENU)
+        print(visual.ciano(MENU))
         opcao = input("Opção: ")
         if opcao == "0":
             break

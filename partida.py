@@ -39,9 +39,10 @@ class Partida:
             self._jogar_lance(minuto, ataque, defesa)
 
     def _narrar(self, minuto, texto, importante=False):
-        """Só gols e defesas importantes aparecem, a menos que DETALHADO seja True."""
+        """Só gols e defesas importantes aparecem, a menos que DETALHADO seja True.
+        Cada evento é (texto, destaque); destaque=True é usado para pintar de verde."""
         if importante or self.DETALHADO:
-            self.eventos.append(f"{minuto:02d}' {texto}")
+            self.eventos.append((f"{minuto:02d}' {texto}", importante))
 
     def _jogar_lance(self, minuto, ataque, defesa):
         finalizador = random.choice(ataque.finalizadores())
@@ -103,12 +104,3 @@ class Partida:
             self._estatisticas[goleiro].defesas += 1
             self._narrar(minuto, "DEFESA! " + random.choice(frases.DEFESA_GOLEIRO[tipo]).format(**dados),
                          importante=True)
-
-    # ---------- relatório ----------
-    def relatorio(self):
-        g1, g2 = self.placar()
-        linhas = ["", *self.eventos, "", f"FIM: {self.casa.nome} {g1} x {g2} {self.visitante.nome}", "",
-                  f"{'Jogador':<22}{'Equipe':<10}{'Gols':>5}{'Assist':>8}{'Defesas':>9}"]
-        for eq, j, est in self.estatisticas():
-            linhas.append(f"{j.nome:<22}{eq.nome:<10}{est.gols:>5}{est.assistencias:>8}{est.defesas:>9}")
-        return "\n".join(linhas)
