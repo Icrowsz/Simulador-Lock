@@ -48,15 +48,6 @@ def carregar_exemplo():
         Jogador("Oliver Aiku", 19, "Zagueiro", 75, 65, 65, 90),
         Jogador("Gen Fukaku", 19, "Goleiro", 30, 45, 50, 85)
     ]
-    
-    newgen = [
-        Jogador("Michael Kaiser", 19, "Atacante", 95, 75, 80, 55),
-        Jogador("Itoshi Sae", 18, "Meio-campista", 80, 95, 80, 50),
-        Jogador("Vivian Hugo", 18, "Meio-campista", 85, 90, 75, 70),
-        Jogador("Julian Loki", 18, "Ala", 85, 75, 95, 50),
-        Jogador("Don Lorenzo", 19, "Zagueiro", 65, 75, 85, 90),
-        Jogador("Pedro Mandela", 18, "Goleiro", 30, 40, 50, 90)
-    ]
 
     pxg = [
         Jogador("Rin Itoshi", 17, "Atacante", 94, 82, 85, 60),
@@ -73,7 +64,7 @@ def carregar_exemplo():
         Jogador("Reo Mikage", 18, "Meio-campista", 80, 90, 82, 75),
         Jogador("Hyoma Chigiri", 18, "Ala", 86, 70, 98, 55),
         Jogador("Kazuma Nio", 18, "Zagueiro", 65, 60, 68, 85),
-        Jogador("Prickett", 19, "Goleiro", 30, 40, 50, 86)
+        Jogador("Rook", 19, "Goleiro", 30, 40, 50, 86)
     ]
 
     barcha = [
@@ -84,26 +75,36 @@ def carregar_exemplo():
         Jogador("Miroku Darai", 18, "Zagueiro", 68, 70, 72, 82),
         Jogador("Moro", 19, "Goleiro", 30, 42, 48, 85)
     ]
+        
+    newgen = [
+        Jogador("Michael Kaiser", 19, "Atacante", 95, 75, 80, 55),
+        Jogador("Itoshi Sae", 18, "Meio-campista", 80, 95, 80, 50),
+        Jogador("Vivian Hugo", 18, "Meio-campista", 85, 90, 75, 70),
+        Jogador("Julian Loki", 18, "Ala", 85, 75, 95, 50),
+        Jogador("Don Lorenzo", 19, "Zagueiro", 65, 75, 85, 90),
+        Jogador("Pedro Mandela", 18, "Goleiro", 30, 40, 50, 90)
+    ]
+
 
     # Treinadores
     noa = Treinador("Noa", 32, "Quero encontrar um rival digno")
     snuffy = Treinador("Snuffy", 37, "Futebol é um trabalho em empresa, não um esporte")
-    ray = Treinador("Ray Dark", 45, "Buscar jovens talentos pelo mundo")
     loki = Treinador("Julian Loki", 17, "A velocidade é a chave para a evolução absoluta do futebol")
     prince = Treinador("Chris Prince", 28, "O físico perfeito cria o futebol perfeito")
     lavinho = Treinador("Lavinho", 26, "O futebol é uma arte livre e caótica baseada na imaginação")
+    ray = Treinador("Ray Dark", 45, "Buscar jovens talentos pelo mundo")
 
     # Equipes
     time_bastard = Equipe("Bastard", noa)
     time_ubers = Equipe("Ubers", snuffy)
-    time_newgen = Equipe("New Gen", ray)
     time_pxg = Equipe("PXG", loki)
     time_manshine = Equipe("Manshine", prince)
     time_barcha = Equipe("Barcha", lavinho)
+    time_newgen = Equipe("New Gen", ray)
 
-    listas_jogadores = [bastard, ubers, newgen, pxg, manshine, barcha]
-    time_equipes = [time_bastard, time_ubers, time_newgen, time_pxg, time_manshine, time_barcha]
-    lista_treinadores = [noa, snuffy, ray, loki, prince, lavinho]
+    listas_jogadores = [bastard, ubers, pxg, manshine, barcha, newgen]
+    time_equipes = [time_bastard, time_ubers, time_pxg, time_manshine, time_barcha, time_newgen]
+    lista_treinadores = [noa, snuffy, loki, prince, lavinho, ray]
 
     for eq, lista in zip(time_equipes, listas_jogadores):
         for j in lista:
