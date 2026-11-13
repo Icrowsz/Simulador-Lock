@@ -2,6 +2,7 @@ import random
 from duelo import vence, chance_ataque
 from estatistica import Estatistica
 import frases
+import papeis
 
 
 class Partida:
@@ -45,19 +46,17 @@ class Partida:
             self.eventos.append((f"{minuto:02d}' {texto}", importante))
 
     def _jogar_lance(self, minuto, ataque, defesa):
-        finalizador = random.choice(ataque.finalizadores())
+        finalizador = papeis.escolher(ataque.jogadores, "finalizar")
         assistente = None
+        lance_assistencia = None
         if random.random() < 0.25:
             self._narrar(minuto, f"{finalizador.nome} ({ataque.nome}) parte sozinho para a finalização!")
-            lance_assistencia = None
         else:
-            opcoes = [j for j in ataque.construtores() if j is not finalizador] or ataque.construtores()
-            construtor = random.choice(opcoes)
+            construtor = papeis.escolher(ataque.jogadores, "construir", excluir=finalizador)
             lance_assistencia = self._construir(minuto, construtor, ataque, defesa)
             if lance_assistencia is None:
                 return
-            if construtor is not finalizador:
-                assistente = construtor
+            assistente = construtor
         self._finalizar(minuto, finalizador, assistente, lance_assistencia, ataque, defesa)
 
     def _construir(self, minuto, construtor, ataque, defesa):
@@ -65,12 +64,14 @@ class Partida:
             lance = random.choice(["drible", "cruzamento"])
         elif construtor.posicao == "Meio-campista":
             lance = random.choice(["troca de passe", "cruzamento longo"])
-        else:
+        else:  # atacante ou zagueiro fazendo um passe
             lance = "passe"
         # drible usa Velocidade; os outros lances usam Passe
-        atributo = construtor.velocidade if lance == "drible" else construtor.passe
-        marcador = random.choice(defesa.marcadores())
-        if vence(atributo, marcador.defesa):
+        base = construtor.velocidade if lance == "drible" else construtor.passe
+        forca = base * papeis.fator(construtor, "construir")
+        marcador = papeis.escolher(defesa.jogadores, "defender")
+        forca_marcador = marcador.defesa * papeis.fator(marcador, "defender")
+        if vence(forca, forca_marcador):
             self._narrar(minuto, f"{construtor.nome} ({ataque.nome}) passa por {marcador.nome} com {lance}!")
             return lance
         self._narrar(minuto, f"{marcador.nome} ({defesa.nome}) corta o {lance} de {construtor.nome}.")
@@ -79,16 +80,15 @@ class Partida:
     def _finalizar(self, minuto, finalizador, assistente, lance_assistencia, ataque, defesa):
         # Só descrição: a mecânica é a mesma para os dois tipos
         tipo = random.choice(["chuta direto", "finaliza de voleio"])
-        zagueiros = defesa.por_posicao("Zagueiro")
-        if zagueiros:
-            zagueiro = random.choice(zagueiros)
-            if not vence(finalizador.chute, zagueiro.defesa):
-                self._estatisticas[zagueiro].defesas += 1
-                self._narrar(minuto, f"{finalizador.nome} {tipo}... mas {zagueiro.nome} bloqueia!")
-                return
+        forca_chute = finalizador.chute * papeis.fator(finalizador, "finalizar")
+        bloqueador = papeis.escolher(defesa.jogadores, "defender")
+        if not vence(forca_chute, bloqueador.defesa * papeis.fator(bloqueador, "defender")):
+            self._estatisticas[bloqueador].defesas += 1
+            self._narrar(minuto, f"{finalizador.nome} {tipo}... mas {bloqueador.nome} bloqueia!")
+            return
         goleiro = defesa.goleiro
         dados = {"f": finalizador.nome, "g": goleiro.nome, "t": ataque.nome}
-        if vence(finalizador.chute, goleiro.defesa):
+        if vence(forca_chute, goleiro.defesa):
             self._gols[ataque] += 1
             self._estatisticas[finalizador].gols += 1
             if assistente:

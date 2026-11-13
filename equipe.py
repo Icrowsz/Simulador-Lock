@@ -32,19 +32,5 @@ class Equipe:
     def por_posicao(self, *posicoes):
         return [j for j in self._jogadores if j.posicao in posicoes]
 
-    def _linha(self):
-        return [j for j in self._jogadores if j.posicao != "Goleiro"]
-
-    # Quem pode finalizar, construir a jogada e marcar (com alternativas
-    # caso o usuário monte um time sem alguma posição)
-    def finalizadores(self):
-        return self.por_posicao("Atacante") or self.por_posicao("Meio-campista", "Ala") or self._linha()
-
-    def construtores(self):
-        return self.por_posicao("Meio-campista", "Ala") or self._linha()
-
-    def marcadores(self):
-        return self.por_posicao("Zagueiro", "Meio-campista") or self._linha()
-
     def __str__(self):
         return f"{self.nome} (técnico: {self.treinador.nome}, {len(self._jogadores)}/{self.TAMANHO} jogadores)"

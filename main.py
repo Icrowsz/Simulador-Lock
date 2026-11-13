@@ -54,7 +54,7 @@ def carregar_exemplo():
         Jogador("Rin Itoshi", 17, "Atacante", 94, 82, 85, 60),
         Jogador("Shidou Ryusei", 18, "Atacante", 96, 60, 82, 50),
         Jogador("Charles Chevalier", 17, "Meio-campista", 75, 95, 80, 55),
-        Jogador("Zantetsu Zantetsu", 18, "Ala", 78, 65, 96, 50),
+        Jogador("Zantetsu Tsurugi", 18, "Ala", 78, 65, 96, 50),
         Jogador("Karasu Tabito", 18, "Zagueiro", 72, 88, 76, 80),
         Jogador("Renoir", 19, "Goleiro", 30, 45, 50, 88)
     ]

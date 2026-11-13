@@ -30,6 +30,8 @@ ASSISTENCIA = {
     "passe": [
         "{a} sai jogando e encontra {f} em boa posição.",
         "{a} toca para {f}, que fica de frente para o gol.",
+        "{a} surpreende e faz um passe longo para {f}.",
+        "Passe inesperado de {a}! {f} recebe livre.",
     ],
 }
 
