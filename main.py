@@ -76,16 +76,6 @@ def carregar_exemplo():
         Jogador("Miroku Darai", 18, "Zagueiro", 68, 70, 72, 82),
         Jogador("Moro", 19, "Goleiro", 30, 42, 48, 85)
     ]
-        
-    newgen = [
-        Jogador("Michael Kaiser", 19, "Atacante", 95, 75, 80, 55),
-        Jogador("Itoshi Sae", 18, "Meio-campista", 80, 95, 80, 50),
-        Jogador("Vivian Hugo", 18, "Meio-campista", 85, 90, 75, 70),
-        Jogador("Julian Loki", 18, "Ala", 85, 75, 95, 50),
-        Jogador("Don Lorenzo", 19, "Zagueiro", 65, 75, 85, 90),
-        Jogador("Pedro Mandela", 18, "Goleiro", 30, 40, 50, 90)
-    ]
-
 
     # Treinadores
     noa = Treinador("Noa", 32, "Quero encontrar um rival digno")
@@ -93,7 +83,6 @@ def carregar_exemplo():
     loki = Treinador("Julian Loki", 17, "A velocidade é a chave para a evolução absoluta do futebol")
     prince = Treinador("Chris Prince", 28, "O físico perfeito cria o futebol perfeito")
     lavinho = Treinador("Lavinho", 26, "O futebol é uma arte livre e caótica baseada na imaginação")
-    ray = Treinador("Ray Dark", 45, "Buscar jovens talentos pelo mundo")
 
     # Equipes
     time_bastard = Equipe("Bastard", noa)
@@ -101,11 +90,10 @@ def carregar_exemplo():
     time_pxg = Equipe("PXG", loki)
     time_manshine = Equipe("Manshine", prince)
     time_barcha = Equipe("Barcha", lavinho)
-    time_newgen = Equipe("New Gen", ray)
 
-    listas_jogadores = [bastard, ubers, pxg, manshine, barcha, newgen]
-    time_equipes = [time_bastard, time_ubers, time_pxg, time_manshine, time_barcha, time_newgen]
-    lista_treinadores = [noa, snuffy, loki, prince, lavinho, ray]
+    listas_jogadores = [bastard, ubers, pxg, manshine, barcha]
+    time_equipes = [time_bastard, time_ubers, time_pxg, time_manshine, time_barcha]
+    lista_treinadores = [noa, snuffy, loki, prince, lavinho]
 
     for eq, lista in zip(time_equipes, listas_jogadores):
         for j in lista:
@@ -116,7 +104,6 @@ def carregar_exemplo():
     treinadores.extend(lista_treinadores)
     equipes.extend(time_equipes)
     print("Dados de exemplo carregados!")
-
 
 def cadastrar_jogador():
     nome = input("Nome: ")
